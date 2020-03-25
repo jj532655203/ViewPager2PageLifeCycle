@@ -21,8 +21,11 @@ allprojects.repositories{ maven { url "https://jitpack.io" } }
 implementation 'com.github.jj532655203:ViewPager2PageLifeCycle:1.0.0'
 
 ###  3.定义viewpager2的adapter
+
 建议你直接使用默认adapter:DefaultViewPager2Adapter.java,如下:
+
 viewPager2.setAdapter(new DefaultViewPager2Adapter<MathWriteAdapterItemBean, MathWritePageView>(R.layout.layout_adapter_page_math_write, itemBeans, new WeakReference<>(viewPager2)));
+
 MathWriteAdapterItemBean:               泛型T,用于指定你将使用的携带数据的类,<此处请换成你自己的>
 MathWritePageView:                      泛型K,用于指定你将在viewpager2中展示的page类,<此处请换成你自己的>
 R.layout.layout_adapter_page_math_write:条目page的布局,其根元素必须是泛型K所指的类,如上便是<MathWritePageView layoutWidht="match_parent" layout_height="math_parent">....</MathWritePageView>
@@ -30,11 +33,13 @@ itemBeans:                              各条目page的数据
 new WeakReference<>(viewPager2):        viewPager2的弱引用
 
 ###  4.定义viewpager2的条目page(view)
+
 请继承抽象类BaseViewPager2Page,如下:
 public class MathWritePageView extends BaseViewPager2Page
 MathWriteAdapterItemBean:               泛型T,用于指定你将使用的携带数据的类,<此处请换成你自己的>
-(泛型T和K用来干嘛的?为了方便道友使用的,你搞不错了,搞错了会lint会警告,所以知道使用多简单了吧? :))
-implement如下方法:
+//泛型T和K用来干嘛的?为了方便道友使用的,你搞不错了,搞错了会lint会警告,所以知道使用多简单了吧? :)
+
+重写如下方法:
 
     /**
      * 挂载新条目数据之前,先将旧页的数据清除
@@ -59,4 +64,4 @@ implement如下方法:
     public abstract void onSavePageData();
 
 	
-##  本库应该是全网第一个将viewpager2的条目page的生命周期方法总结出来的,给个star提提神呗:)
+##  本库应该是全网第一个将viewpager2的条目page的生命周期方法总结出来的,觉得好请star,让我们共同为开源世界做贡献!
