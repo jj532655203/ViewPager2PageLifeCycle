@@ -1,0 +1,2 @@
+include ':app', ':page_lifecycle'
+rootProject.name='ViewPager2PageLifeCycle'
