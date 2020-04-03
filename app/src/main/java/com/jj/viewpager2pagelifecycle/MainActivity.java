@@ -12,7 +12,6 @@ import com.jj.touch_aware.TouchAwareConstraintLayout;
 import com.jj.touch_aware.utils.ViewPager2Util;
 import com.jj.viewpager2pagelifecycle.bean.DemoScribbleAdapterItemBean;
 import com.jj.viewpager2pagelifecycle.view.DemoScribblePageView;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        CrashReport.initCrashReport(getApplicationContext(), Constant.BUGLY_ID, false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

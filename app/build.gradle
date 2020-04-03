@@ -41,7 +41,4 @@ dependencies {
     implementation project(":page_lifecycle")
 //    implementation 'com.github.jj532655203:ViewPager2PageLifeCycle:1.0.0'
 
-    implementation 'com.tencent.bugly:crashreport:3.1.9'
-    implementation 'com.tencent.bugly:nativecrashreport:3.7.1'
-
 }
