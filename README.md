@@ -1,13 +1,5 @@
 
 
-api下载地址:
-
-https://phone-love-piano-public-ro.oss-cn-shenzhen.aliyuncs.com/demo-apk/viewpager2_page_lifecycle_debug_0403.apk
-
-或手机扫码下载:
-
-![Image apk download qrcode](https://phone-love-piano-public-ro.oss-cn-shenzhen.aliyuncs.com/demo-apk/viewpager2_page_lifecycle_debug_apk_qrcode.png)
-
 ##  1.你真的清楚viewpager2一顿翻页+退出操作伴随的page的生命周期方法吗?
 不清楚对吧?那不行!得让你清楚,快去看代码吧,很简单的!
 什么?!你清楚??? 请听题?
