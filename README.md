@@ -1,6 +1,6 @@
 
 
-api下载地址:
+api下载地址:(体验:单指书写,2指翻页)
 
 https://phone-love-piano-public-ro.oss-cn-shenzhen.aliyuncs.com/demo-apk/viewpager2_page_lifecycle_debug_0403.apk
 
