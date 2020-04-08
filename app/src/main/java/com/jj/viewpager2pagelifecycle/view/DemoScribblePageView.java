@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.util.ObjectUtils;
@@ -66,6 +67,20 @@ public class DemoScribblePageView extends BaseViewPager2Page<DemoScribbleAdapter
                 mAddPathList.add(var1);
             }
         });
+        mScribbleView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                setPathList();
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
+        });
 
     }
 
@@ -95,11 +110,21 @@ public class DemoScribblePageView extends BaseViewPager2Page<DemoScribbleAdapter
         mImgUrl = bean.getImgUrl();
 
         mImg.setImageResource(mImgUrl);
-        PageUserDataInfo pageUserDataInfo = (PageUserDataInfo) MemoryLruCacheUtils.getInstance().get(Constant.MONITOR_OSS_URL_PREFIX + mImgUrl);
-        if (pageUserDataInfo != null && ObjectUtils.isNotEmpty(pageUserDataInfo.getPathList())) {
-            mDrawScribblesView.setPathList(pageUserDataInfo.getPathList(), null, mPosition);
-        }
 
+        setPathList();
+
+    }
+
+    private void setPathList() {
+        if (mImgUrl == 0) return;
+        PageUserDataInfo pageUserDataInfo = (PageUserDataInfo) MemoryLruCacheUtils.getInstance().get(Constant.MONITOR_OSS_URL_PREFIX + mImgUrl);
+        List<TouchPointList> pathList;
+        if (pageUserDataInfo == null || ObjectUtils.isEmpty(pageUserDataInfo.getPathList())) {
+            pathList = null;
+        } else {
+            pathList = pageUserDataInfo.getPathList();
+        }
+        mDrawScribblesView.setPathList(pathList, null, mPosition);
     }
 
 
