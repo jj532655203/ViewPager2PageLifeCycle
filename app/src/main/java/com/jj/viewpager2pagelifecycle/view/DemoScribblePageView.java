@@ -131,13 +131,13 @@ public class DemoScribblePageView extends BaseViewPager2Page<DemoScribbleAdapter
     @Override
     public void onResume() {
         Log.d(TAG, "onResume position=" + mPosition);
-        mScribbleView.setRawDrawingEnable(true);
+        mScribbleView.setRawDrawingEnableAfterSurfaceCreated(true);
     }
 
     @Override
     public void onPause() {
         Log.d(TAG, "onPause position=" + mPosition);
-        mScribbleView.setRawDrawingEnable(false);
+        mScribbleView.setRawDrawingEnableAfterSurfaceCreated(false);
     }
 
     @Override
