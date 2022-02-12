@@ -12,8 +12,14 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+/**
+ * author:Jay
+ * convert时渲染视图/加载数据
+ * onResume/onPause时启停动画/线程等资源
+ */
 public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> extends BaseQuickAdapter<T, BaseViewHolder> {
 
+    private static final String TAG = BaseViewPager2Adapter.class.getSimpleName();
     private WeakReference<ViewPager2> viewPager2WeakRef;
 
     /**
@@ -22,7 +28,7 @@ public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> ext
     public BaseViewPager2Adapter(int layoutResId, @Nullable List<T> data, WeakReference<ViewPager2> viewPager2WeakReference) {
         super(layoutResId, data);
         viewPager2WeakRef = viewPager2WeakReference;
-        viewPager2WeakReference.get().registerOnPageChangeCallback(new BaseViewPager2Adapter.OnPageChangeCallback(viewPager2WeakReference));
+        viewPager2WeakReference.get().registerOnPageChangeCallback(new OnPageChangeCallback(viewPager2WeakReference));
     }
 
     @Override
@@ -31,12 +37,12 @@ public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> ext
             throw new RuntimeException("条目视图的根布局必须是泛型K所指的类");
         }
         BaseViewPager2Page<T> pageView = (BaseViewPager2Page) helper.itemView;
-        pageView.convert(item, helper.getAdapterPosition());
+        pageView.clearOldPageData();
 
         helper.itemView.setTag(helper.getAdapterPosition());
-
         convert(helper, item, pageView);
 
+        pageView.onViewConverted(item, helper.getAdapterPosition());
     }
 
     /**
@@ -60,7 +66,17 @@ public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> ext
 
         private int mmLastPosition = -1;
         private boolean mmNewPageNotFound;
-        private WeakReference<ViewPager2> mmViewPager2Ref;
+        private final WeakReference<ViewPager2> mmViewPager2Ref;
+        private final Runnable remedialResumeRun = new Runnable() {
+            @Override
+            public void run() {
+                ViewPager2 viewPager2 = mmViewPager2Ref.get();
+                BaseViewPager2Page pageView = viewPager2.findViewWithTag(viewPager2.getCurrentItem());
+                if (pageView != null) {
+                    pageView.resume();
+                }
+            }
+        };
 
         OnPageChangeCallback(WeakReference<ViewPager2> viewPager2Ref) {
             this.mmViewPager2Ref = viewPager2Ref;
@@ -72,18 +88,20 @@ public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> ext
 
             if (mmLastPosition >= 0 && mmLastPosition != position) {
                 BaseViewPager2Page lastPageView = viewPager2.findViewWithTag(mmLastPosition);
-                if (lastPageView != null) lastPageView.onPause();
+                if (lastPageView != null) lastPageView.pause();
             }
 
             mmLastPosition = position;
 
             BaseViewPager2Page pageView = viewPager2.findViewWithTag(viewPager2.getCurrentItem());
             if (pageView != null) {
-                pageView.onResume();
+                pageView.resume();
                 return;
             }
 
             mmNewPageNotFound = true;
+            Log.d(TAG, "onPageSelected mmNewPageNotFound position=" + position);
+            viewPager2.postDelayed(remedialResumeRun,500L);
         }
 
         public void onPageScrollStateChanged(@ViewPager2.ScrollState int state) {
@@ -98,7 +116,8 @@ public abstract class BaseViewPager2Adapter<T, K extends BaseViewPager2Page> ext
                     return;
                 }
 
-                pageView.onResume();
+                viewPager2.removeCallbacks(remedialResumeRun);
+                pageView.resume();
 
             }
         }
