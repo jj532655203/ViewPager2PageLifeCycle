@@ -103,7 +103,7 @@ public class DemoScribblePageView extends BaseViewPager2Page<DemoScribbleAdapter
     }
 
     @Override
-    protected void onConvertView(DemoScribbleAdapterItemBean bean, int adapterPosition) {
+    protected void onViewConverted(DemoScribbleAdapterItemBean bean, int adapterPosition) {
         Log.d(TAG, "onConvertView bean=" + bean.toString());
 
         this.mPosition = adapterPosition;
@@ -165,6 +165,11 @@ public class DemoScribblePageView extends BaseViewPager2Page<DemoScribbleAdapter
 
         //为简单演示,此处不做磁盘缓存和服务器缓存
 
+    }
+
+    @Override
+    protected void onRelease() {
+        Log.d(TAG,"onRelease");
     }
 
 }
